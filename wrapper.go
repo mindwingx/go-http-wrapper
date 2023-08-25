@@ -53,10 +53,10 @@ func (g *engine) InitApiService() {
 	//todo: handle limitation of calling the current service.
 	//for docker, use the other services names' on the same network
 	trustedProxies := []string{"127.0.0.1"}
-	proxies := flag.String("proxy", "", "extra trusted proxy")
+	proxies := flag.String("proxy", "none", "extra trusted proxy")
 	flag.Parse()
 
-	if len(*proxies) > 0 {
+	if *proxies != "none" {
 		newProxies := strings.Split(*proxies, ",")
 		trustedProxies = append(trustedProxies, newProxies...)
 	}
