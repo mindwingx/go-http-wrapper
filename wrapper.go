@@ -1,11 +1,13 @@
 package httpwrapper
 
 import (
+	"flag"
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
 	"github.com/mindwingx/abstraction"
 	"github.com/mindwingx/go-helper"
+	"strings"
 	"time"
 )
 
@@ -50,7 +52,17 @@ func NewGin(registry abstraction.Registry, locale abstraction.Locale) abstractio
 func (g *engine) InitApiService() {
 	//todo: handle limitation of calling the current service.
 	//for docker, use the other services names' on the same network
-	err := g.core.SetTrustedProxies([]string{"0.0.0.0"})
+	trustedProxies := []string{"127.0.0.1"}
+	proxies := flag.String("proxy", "", "extra trusted proxy")
+	flag.Parse()
+
+	newProxies := strings.Split(*proxies, ",")
+
+	if len(newProxies) > 0 {
+		trustedProxies = append(trustedProxies, newProxies...)
+	}
+
+	err := g.core.SetTrustedProxies(trustedProxies)
 	if err != nil {
 		helper.CustomPanic(g.locale.Get("http_init_err"), err)
 	}
