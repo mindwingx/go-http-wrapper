@@ -56,9 +56,8 @@ func (g *engine) InitApiService() {
 	proxies := flag.String("proxy", "", "extra trusted proxy")
 	flag.Parse()
 
-	newProxies := strings.Split(*proxies, ",")
-
-	if len(newProxies) > 0 {
+	if len(*proxies) > 0 {
+		newProxies := strings.Split(*proxies, ",")
 		trustedProxies = append(trustedProxies, newProxies...)
 	}
 
